@@ -91,14 +91,16 @@
             url: "http://localhost:5000/token",
             type: "POST",
             contentType: "application/json",
+            // data: { name: 'Aman '},
             data: JSON.stringify({
                 'email': email,
                 'phone': phone,
                 'firstName': firstName
             }),
             success: function (result) {
-                token = result.token;
-                console.log(result);
+                // const data = JSON.parse(result)
+                token = result.customer_id;
+                console.log(`Front end: ${result.customer_id}`);
                 console.log(`Token: ${token}`);
                 billingAddress = {
                     city,
@@ -200,7 +202,7 @@
                             } else {
                                 // console.log("ok1")
                                 instance.showFailureScreen(
-                                    "Payment was declined. Try again with the same or another payment method."
+                                    "Payment  declined! Please try again with the same or different payment method."
                                     );
                             }
                             setTimeout(function () {
@@ -210,7 +212,7 @@
                         }
                     });
                 } else {
-                    console.error(error);
+                    console.error(`Errorrrrrrrr`);
                     // Handle the error
                 }
             },

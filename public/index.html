@@ -84,9 +84,8 @@
         let city = document.getElementById("city").value;
         let zip = document.getElementById("zip").value;
         let street = document.getElementById("address").value;
-        var token = '';
-        //amount
         let amount = document.getElementById("amount").value;
+        let token = '';
         $.ajax({
             url: "http://localhost:5000/token",
             type: "POST",
@@ -99,8 +98,8 @@
             }),
             success: function (result) {
                 // const data = JSON.parse(result)
-                token = result.customer_id;
-                console.log(`Front end: ${result.customer_id}`);
+                token = result;
+                console.log(`Front end: ${result}`);
                 console.log(`Token: ${token}`);
                 billingAddress = {
                     city,

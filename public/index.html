@@ -10,7 +10,7 @@
 
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">ROIIM ASSIGNMENT</a>
 
     </nav>
@@ -21,17 +21,18 @@
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="email">Email</label>
-                            <input required type="email" class="form-control" value="somgupta13@gmail.com" id="email">
+                            <input required type="email" class="form-control" value="agarwalaman6397@gmail.com"
+                                id="email">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="firstName">First Name</label>
-                            <input required type="text" class="form-control" value="som" id="firstName">
+                            <input required type="text" class="form-control" value="Aman" id="firstName">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="lastName">Last Name</label>
-                            <input required type="text" class="form-control" value="gupta" id="lastName">
+                            <input required type="text" class="form-control" value="Agarwal" id="lastName">
                         </div>
                     </div>
                     <div class="form-group">
@@ -41,17 +42,17 @@
                     </div>
                     <div class="form-group ">
                         <label for="phoneNum">Phone</label>
-                        <input required type="number" class="form-control" value="8085603914" id="phoneNum">
+                        <input required type="number" class="form-control" value="8318984272" id="phoneNum">
                         </select>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="city">City</label>
-                            <input required type="text" class="form-control" value="Shivpuri" id="city">
+                            <input required type="text" class="form-control" value="Kanpur" id="city">
                         </div>
                         <div class="form-group col-md-4">
                             <label for="zip">Zip</label>
-                            <input required type="number" class="form-control" value="473551" id="zip">
+                            <input required type="number" class="form-control" value="208001" id="zip">
                         </div>
                         <div class="form-group col-md-4">
                             <label for="amount">Amount</label>
@@ -90,7 +91,6 @@
             url: "http://localhost:5000/token",
             type: "POST",
             contentType: "application/json",
-            // data: { name: 'Aman '},
             data: JSON.stringify({
                 'email': email,
                 'phone': phone,
@@ -120,32 +120,30 @@
                     }
                 }
 
-                function uuidv4() {
+                function hash() {
                     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
                         var r = Math.random() * 16 | 0,
                             v = c == 'x' ? r : (r & 0x3 | 0x8);
                         return v.toString(16);
                     });
                 }
-                // console.log(uuidv4());
-                checkout(token, billingAddress, customer, amount, uuidv4())
+                checkout(token, billingAddress, customer, amount, hash())
             }
         });
-
     }
 
-    function checkout(token, billingAddress, customer, amount, uuidv4) {
+    function checkout(token, billingAddress, customer, amount, hash) {
         console.log(token);
         paysafe.checkout.setup(
             "cHVibGljLTc3NTE6Qi1xYTItMC01ZjAzMWNiZS0wLTMwMmQwMjE1MDA4OTBlZjI2MjI5NjU2M2FjY2QxY2I0YWFiNzkwMzIzZDJmZDU3MGQzMDIxNDUxMGJjZGFjZGFhNGYwM2Y1OTQ3N2VlZjEzZjJhZjVhZDEzZTMwNDQ=", {
                 "currency": "USD",
-                "amount": 1000,
+                "amount": parseInt(amount) * 100,
                 "singleUseCustomerToken": token,
                 "locale": "en_US",
                 "customer": customer,
                 "billingAddress": billingAddress,
                 "environment": "TEST",
-                "merchantRefNum": uuidv4,
+                "merchantRefNum": hash,
                 "canEditAmount": false,
                 "payout": false,
                 "payoutConfig": {
@@ -176,11 +174,10 @@
                 }
             },
             function (instance, error, result) {
-                console.log(instance);
-                console.log(error);
-                console.log(result);
+                // console.log(instance);
+                // console.log(error);
+                // console.log(result);
                 if (result && result.paymentHandleToken) {
-                    console.log('Hellooooo');
                     console.log(result.paymentHandleToken);
                     // make AJAX call to Payments API
                     $.ajax({
@@ -193,16 +190,14 @@
                         }, ),
                         success: (data) => {
 
-                            // console.log(data);              
-
-                            if (data.data == "COMPLETED") {
+                            if (data.status == "COMPLETED") {
                                 // console.log("ok")
                                 instance.showSuccessScreen("Payment Successful!");
                             } else {
                                 // console.log("ok1")
                                 instance.showFailureScreen(
                                     "Payment  declined! Please try again with the same or different payment method."
-                                    );
+                                );
                             }
                             setTimeout(function () {
                                 window.location.replace(window.location.href);

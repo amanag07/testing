@@ -18,6 +18,8 @@ const port = process.env.PORT || 5000
 app.use(cors())
 app.use(bodyParser.json())
 
+app.use(express.static('public'))
+
 const fetchId = async (req) => {
     function makeid(length) {
         var result = '';

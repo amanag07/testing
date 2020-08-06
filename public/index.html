@@ -88,7 +88,7 @@
         let amount = document.getElementById("amount").value;
         let token = '';
         $.ajax({
-            url: "http://localhost:5000/token",
+            url: "https://boiling-oasis-11442.herokuapp.com/token",
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify({
@@ -182,7 +182,7 @@
                     // make AJAX call to Payments API
                     $.ajax({
                         type: "POST",
-                        url: "http://localhost:5000/payment",
+                        url: "https://boiling-oasis-11442.herokuapp.com/payment",
                         contentType: "application/json",
                         data: JSON.stringify({
                             'token': result.paymentHandleToken,

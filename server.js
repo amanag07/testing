@@ -22,10 +22,10 @@ app.use(express.static('public'))
 
 const fetchId = async (req) => {
     function makeid(length) {
-        var result = '';
-        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for (var i = 0; i < length; i++) {
+        let result = '';
+        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let charactersLength = characters.length;
+        for (let i = 0; i < length; i++) {
             result += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
         return result;
@@ -35,7 +35,6 @@ const fetchId = async (req) => {
         request({
             method: 'POST',
             url: 'https://api.test.paysafe.com/paymenthub/v1/customers',
-            // url: 'https://private-anon-88e54fc067-paysafeapipaymenthubv1.apiary-mock.com/paymenthub/v1/customers',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Basic cHJpdmF0ZS03NzUxOkItcWEyLTAtNWYwMzFjZGQtMC0zMDJkMDIxNDQ5NmJlODQ3MzJhMDFmNjkwMjY4ZDNiOGViNzJlNWI4Y2NmOTRlMjIwMjE1MDA4NTkxMzExN2YyZTFhODUzMTUwNWVlOGNjZmM4ZTk4ZGYzY2YxNzQ4',
@@ -64,23 +63,18 @@ const fetchId = async (req) => {
                 reject('Can not fetch');
             }
             try {
-                // console.log(body);
                 const data = JSON.parse(body)
-                // console.log(data);
                 const prevUser = await User.findOne({
                     email: req.body.email
                 })
                 if (prevUser) {
-                    console.log('User already present')
                     userId = prevUser.customer_id
                     resolve(userId);
                 } else {
-                    // console.log();
                     const user = new User({
                         customer_id: data.id,
                         email: req.body.email,
                     })
-                    // console.log('kkkkkk');
                     await user.save()
                     userId = user.customer_id
                     resolve(userId);
@@ -98,7 +92,6 @@ const fetchToken = async (userId) => {
         request({
             method: 'POST',
             url: `https://api.test.paysafe.com/paymenthub/v1/customers/${userId}/singleusecustomertokens`,
-            // url: `https://private-anon-4a3c49b921-paysafeapipaymenthubv1.apiary-mock.com/paymenthub/v1/customers/${userId}/singleusecustomertokens`,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Basic cHJpdmF0ZS03NzUxOkItcWEyLTAtNWYwMzFjZGQtMC0zMDJkMDIxNDQ5NmJlODQ3MzJhMDFmNjkwMjY4ZDNiOGViNzJlNWI4Y2NmOTRlMjIwMjE1MDA4NTkxMzExN2YyZTFhODUzMTUwNWVlOGNjZmM4ZTk4ZGYzY2YxNzQ4',
@@ -109,9 +102,6 @@ const fetchToken = async (userId) => {
             if (error) {
                 reject(error);
             }
-            // console.log('Status:', response.statusCode);
-            // console.log('Headers:', JSON.stringify(response.headers));
-            // console.log('Response:', body);
             try {
                 const data = JSON.parse(body)
                 console.log(data.singleUseCustomerToken);
@@ -133,16 +123,15 @@ app.post('/token', async (req, res) => {
 
 app.post('/payment', (req, res) => {
     function makeid(length) {
-        var result = '';
-        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for (var i = 0; i < length; i++) {
+        let result = '';
+        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let charactersLength = characters.length;
+        for (let i = 0; i < length; i++) {
             result += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
         return result;
     }
     const merchId = makeid(10)
-    // console.log(req.body);
     request({
         method: 'POST',
         url: 'https://api.test.paysafe.com/paymenthub/v1/payments',
@@ -162,9 +151,6 @@ app.post('/payment', (req, res) => {
             'description': 'Magazine Subscription'
         })
     }, function (error, response, body) {
-        // console.log('Status:', response.statusCode);
-        // console.log('Headers:', JSON.stringify(response.headers));
-        // console.log('Response:', JSON.parse(body));
         res.send(JSON.parse(body))
     });
 })
